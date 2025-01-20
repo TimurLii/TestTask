@@ -2,13 +2,17 @@ package com.example.testtask.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 import java.util.UUID;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Wallet {
     @Id
     @Column(name = "wallet_uuid", nullable = false)

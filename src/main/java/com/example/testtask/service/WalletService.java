@@ -1,6 +1,7 @@
 package com.example.testtask.service;
 
 import com.example.testtask.entity.Wallet;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,10 @@ public class WalletService {
         return walletRepository.findByWalletUuid(id);
     }
 
+    @Transactional
     public ResponseEntity<Wallet> updateWallet(Wallet updateWallet) {
 
-        Wallet wallet = walletRepository.findByWalletUuid(updateWallet.getWalletUuid());
+        Wallet wallet = walletRepository.findByWalletUuidForUpdate(updateWallet.getWalletUuid());
 
         if (wallet == null) {
             return ResponseEntity.badRequest().build();
@@ -48,7 +50,7 @@ public class WalletService {
     }
 
     private boolean depositOperationType(Wallet updateWallet) {
-        return updateWallet.getOperationType().getDisplayName().equals("+");
+        return updateWallet.getOperationType().equals(Wallet.OperationType.DEPOSIT);
     }
 
     private boolean checkBalance(Wallet wallet, Wallet updateWallet) {
