@@ -3,6 +3,7 @@ package com.example.testtask.controller;
 import com.example.testtask.entity.Wallet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.testtask.service.WalletService;
@@ -24,18 +25,24 @@ public class WalletController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Wallet> getWallet(@PathVariable UUID id) {
+    public ResponseEntity<?> getWallet(@PathVariable UUID id) {
         log.info("Fetching wallet with ID: {}", id);
         Wallet wallet = walletService.getById(id);
         if (wallet == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Wallet not found.");
         }
         return ResponseEntity.ok(wallet);
     }
     @PutMapping
-    public ResponseEntity<Wallet> updateWallet(@RequestBody Wallet updateWallet) {
+    public ResponseEntity<?> updateWallet(@RequestBody Wallet updateWallet) {
         log.info("Updating wallet: {}", updateWallet);
-        return walletService.updateWallet(updateWallet);
+        ResponseEntity<?> responseEntity = walletService.updateWallet(updateWallet);
+        if(responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Wallet not found or underfunded");
+        }
+        return responseEntity;
     }
 
 

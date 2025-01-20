@@ -34,8 +34,9 @@ class WalletServiceRequestProcessingTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    wallet.setAmount(1L);
-                    walletService.updateWallet(wallet);
+                    Wallet newWallet = new Wallet(walletId, Wallet.OperationType.DEPOSIT, 1L);
+
+                    walletService.updateWallet(newWallet);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -63,8 +64,8 @@ class WalletServiceRequestProcessingTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    wallet.setAmount(1L);
-                    walletService.updateWallet(wallet);
+                    Wallet newWallet = new Wallet(walletId, Wallet.OperationType.WITHDRAW, 1L);
+                    walletService.updateWallet(newWallet);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {

@@ -17,6 +17,7 @@ public class WalletService {
 
 
     public Wallet createWallet(Wallet wallet) {
+
         return walletRepository.save(wallet);
     }
 
@@ -25,12 +26,12 @@ public class WalletService {
     }
 
     @Transactional
-    public ResponseEntity<Wallet> updateWallet(Wallet updateWallet) {
+    public ResponseEntity<?> updateWallet(Wallet updateWallet) {
 
         Wallet wallet = walletRepository.findByWalletUuidForUpdate(updateWallet.getWalletUuid());
 
         if (wallet == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Wallet not found");
         }
 
         wallet.setWalletUuid(updateWallet.getWalletUuid());
@@ -41,7 +42,7 @@ public class WalletService {
         }
         else {
             if(!checkBalance(wallet, updateWallet)){
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("Insufficient funds.");
             }
             wallet.setAmount(wallet.getAmount() - updateWallet.getAmount());
         }
@@ -56,5 +57,6 @@ public class WalletService {
     private boolean checkBalance(Wallet wallet, Wallet updateWallet) {
         return wallet.getAmount() >= updateWallet.getAmount();
     }
+
 
 }
