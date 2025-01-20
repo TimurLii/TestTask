@@ -1,4 +1,4 @@
-package com.example.testtask;
+package com.example.testtask.exeptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

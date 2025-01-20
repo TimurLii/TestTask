@@ -9,14 +9,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -32,7 +30,7 @@ class WalletControllerTest {
     private WalletService walletService;
 
     @Test
-    void createWallet() throws Exception {
+    void createWalletResponseIsOk() throws Exception {
         UUID walletId = UUID.randomUUID();
 
         Wallet wallet = new Wallet(walletId, Wallet.OperationType.DEPOSIT, 123321L);
@@ -47,7 +45,7 @@ class WalletControllerTest {
     }
 
     @Test
-    void getWallet() throws Exception {
+    void getWalletResponseIsOk() throws Exception {
 
         UUID walletId = UUID.randomUUID();
 
@@ -60,6 +58,31 @@ class WalletControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.walletUuid").value(walletId.toString()));
+    }
+
+    @Test
+    void createWalletResponseBadRequest() throws Exception {
+        UUID walletId = UUID.randomUUID();
+
+        Wallet wallet = new Wallet(walletId, Wallet.OperationType.DEPOSIT, 123321L);
+
+        mockMvc.perform(post("/api/v1/wallet")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(wallet)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.amount").value(123321L))
+                .andExpect(jsonPath("$.operationType").value(Wallet.OperationType.DEPOSIT.toString()))
+                .andExpect(jsonPath("$.walletUuid").value(walletId.toString()));
+    }
+
+    @Test
+    void getWalletResponseBadRequest() throws Exception {
+        UUID walletId = UUID.randomUUID();
+
+        mockMvc.perform(get("/api/v1/wallet/{id}", walletId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Wallet not found."));
     }
 
 }
