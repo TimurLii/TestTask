@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Timur
+      changes:
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: walletUuid
+                  valueComputed: "gen_random_uuid()"
+              - column:
+                  name: operation_type
+                  value: "DEPOSIT"
+              - column:
+                  name: amount
+                  value: "1000"
+
+  - changeSet:
+      id: 2
+      author: Timur
+      changes:
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: walletUuid
+                  valueComputed: "gen_random_uuid()"
+              - column:
+                  name: operation_type
+                  value: "WITHDRAW"
+              - column:
+                  name: amount
+                  value: "500"
+
+  - changeSet:
+      id: 3
+      author: Timur
+      changes:
+        - insert:
+            tableName: wallet
+            columns:
+              - column:
+                  name: walletUuid
+                  valueComputed: "gen_random_uuid()"
+              - column:
+                  name: operation_type
+                  value: "DEPOSIT"
+              - column:
+                  name: amount
+                  value: "2000"
