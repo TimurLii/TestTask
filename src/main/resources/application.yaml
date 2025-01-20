@@ -3,7 +3,7 @@ server:
   address: localhost
 spring:
   application:
-    name: Polyclinic_PetProject
+    name: TestTask
   datasource:
     url: jdbc:postgresql://localhost:5432/TestTaskDb
     driver-class-name: org.postgresql.Driver
@@ -13,7 +13,7 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     open-in-view: true
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml

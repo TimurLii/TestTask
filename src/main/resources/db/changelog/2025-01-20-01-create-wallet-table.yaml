@@ -1,25 +1,20 @@
 databaseChangeLog:
   - changeSet:
-      id: 2
+      id: 1
       author: Timur
       changes:
         - createTable:
             tableName: wallet
             columns:
               - column:
-                  name: walletUuid
-                  type: uuid
+                  name: wallet_uuid
+                  type: UUID
                   constraints:
                     primaryKey: true
                     nullable: false
-                    defaultValueComputed: "generateId()"
               - column:
                   name: operation_type
-                  type: varchar(10)
-                  constraints:
-                    nullable: false
+                  type: VARCHAR(255)
               - column:
                   name: amount
-                  type: bigint
-                  constraints:
-                    nullable: false
+                  type: BIGINT
