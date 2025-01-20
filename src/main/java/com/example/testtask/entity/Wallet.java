@@ -15,8 +15,8 @@ public class Wallet {
     private UUID walletUuid;
 
     @Column(name = "operation_type")
-    @Enumerated(EnumType.STRING) // Теперь это корректно, так как тип - это enum
-    private OperationType operationType; // Изменено на тип OperationType
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
 
     @Column(name = "amount")
     private Long amount;
@@ -27,8 +27,22 @@ public class Wallet {
             this.walletUuid = UUID.randomUUID();
         }
     }
+
+
+
     public enum OperationType {
-        DEPOSIT,WITHDRAW;
+        DEPOSIT("+"),
+        WITHDRAW("-");
+
+        private final String displayName;
+
+        OperationType(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }
 
