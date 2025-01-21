@@ -1,11 +1,11 @@
 server:
   port: 8080
-  address: localhost
+  address: 0.0.0.0
 spring:
   application:
     name: TestTask
   datasource:
-    url: jdbc:postgresql://localhost:5432/TestTaskDb
+    url: jdbc:postgresql://db:5432/TestTaskDb
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: admin
