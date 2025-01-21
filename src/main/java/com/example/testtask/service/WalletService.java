@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.testtask.repository.WalletRepository;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -34,29 +35,29 @@ public class WalletService {
             return ResponseEntity.badRequest().body("Wallet not found");
         }
 
-        wallet.setWalletUuid(updateWallet.getWalletUuid());
-        wallet.setOperationType(updateWallet.getOperationType());
-
-        if (depositOperationType(updateWallet) ) {
-            wallet.setAmount(updateWallet.getAmount() + wallet.getAmount());
-        }
-        else {
-            if(!checkBalance(wallet, updateWallet)){
-                return ResponseEntity.badRequest().body("Insufficient funds.");
-            }
-            wallet.setAmount(wallet.getAmount() - updateWallet.getAmount());
-        }
+        updateWalletAmount(wallet, updateWallet);
         walletRepository.save(wallet);
+
         return ResponseEntity.ok(wallet);
     }
 
-    private boolean depositOperationType(Wallet updateWallet) {
-        return updateWallet.getOperationType().equals(Wallet.OperationType.DEPOSIT);
+
+    private void updateWalletAmount(Wallet wallet, Wallet updateWallet) {
+        switch (updateWallet.getOperationType()) {
+            case DEPOSIT -> wallet.setAmount(wallet.getAmount() + updateWallet.getAmount());
+            case WITHDRAW -> {
+                if (!checkBalance(wallet, updateWallet)) {
+                    throw new IllegalArgumentException("Wallet not found or underfunded");
+                }
+                wallet.setAmount(wallet.getAmount() - updateWallet.getAmount());
+            }
+            default -> throw new IllegalArgumentException("Unsupported operation type: " + updateWallet.getOperationType());
+        }
     }
+
 
     private boolean checkBalance(Wallet wallet, Wallet updateWallet) {
         return wallet.getAmount() >= updateWallet.getAmount();
     }
-
 
 }

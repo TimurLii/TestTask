@@ -172,7 +172,6 @@ class WalletControllerTest {
 
         Wallet newWallet = new Wallet(walletId, Wallet.OperationType.WITHDRAW, 1100L);
 
-        Long resultSum = wallet.getAmount() - newWallet.getAmount();
 
         mockMvc.perform(put("/api/v1/wallet")
                         .contentType(MediaType.APPLICATION_JSON)

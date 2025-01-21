@@ -3,7 +3,6 @@ package com.example.testtask.controller;
 import com.example.testtask.entity.Wallet;
 import com.example.testtask.service.WalletService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/api/v1/wallet")
 public class WalletController {
-    @Autowired
-    private WalletService walletService;
+
+    private final WalletService walletService;
+
+    public WalletController(WalletService walletService) {
+        this.walletService = walletService;
+    }
 
     @PostMapping
     public ResponseEntity<Wallet>  createWallet( @RequestBody Wallet wallet){
