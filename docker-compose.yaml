@@ -1,3 +1,30 @@
+#version: '3.9'
+#services:
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: TestTask
+#    ports:
+#      - "${SERVER_PORT:-8080}:8080"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - db
+#
+#  db:
+#    image: postgres:15-alpine
+#    container_name: postgres_db
+#    ports:
+#      - "5433:5432"
+#    env_file:
+#      - .env
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+#
+#volumes:
+#  db_data:
 version: '3.9'
 services:
   app:
@@ -6,11 +33,9 @@ services:
       dockerfile: Dockerfile
     container_name: TestTask
     ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/TestTaskDb
-      SPRING_DATASOURCE_USERNAME: Timur
-      SPRING_DATASOURCE_PASSWORD: admin
+      - "${SERVER_PORT:-8080}:8080"
+    env_file:
+      - .env
     depends_on:
       - db
 
@@ -19,10 +44,8 @@ services:
     container_name: postgres_db
     ports:
       - "5433:5432"
-    environment:
-      POSTGRES_USER: Timur
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: TestTaskDb
+    env_file:
+      - .env
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
